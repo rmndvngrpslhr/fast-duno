@@ -1,0 +1,7 @@
+[tool.taskipy. tasks]
+lint = 'ruff . && blue --check . --diff'    --> executa o ruff para ver se não temos nenhum problema com o código e checa se estamos de acordo com a PEP-8
+format = 'blue . && isort .'                --> formata o código usando blue e isort
+run = 'uvicorn fast_duno.app:app --reload'  --> executa o servidor de desenvolvimento do FastAPI
+pre_test = 'task lint'                      --> executa a camada de lint antes de executar os teste
+test = 'pytest -s -x --cov=fast_zero -vv'   --> executa os testes com pytest de forma verbosa (-vv) e adiciona nosso código como base de cobertura
+post_test = 'coverage html'                 --> gera um report de cobertura após os testes
