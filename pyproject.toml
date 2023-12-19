@@ -4,13 +4,14 @@ version = "0.1.0"
 description = "A tiny project to study "
 authors = ["Armando Solheiro <avgsolheiro@gmail.com>"]
 readme = "README.md"
+packages = [{include = "fast_duno"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.105.0"
 uvicorn = "^0.24.0.post1"
-taskipy = "^1.12.2"
-ignr = "^2.2"
+pydantic = {extras = ["email"], version = "^2.5.2"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -38,7 +39,7 @@ pythonpath = "."
 extend-exclude = '(migrations/)'
 
 [tool.taskipy.tasks]
-lint = 'ruff . && blue --check . --diff' 
+lint = 'ruff . && blue --check . --diff'
 format = 'blue . && isort .'
 run = 'uvicorn fast_duno.app:app --reload'
 pre_test = 'task lint'
