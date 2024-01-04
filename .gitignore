@@ -180,3 +180,6 @@ pyrightconfig.json
 # Taskipy exceptions
 !.tox/
 !.nox/
+
+# Database
+database.db

@@ -4,7 +4,6 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-
 from fast_duno.models import Base
 from fast_duno.settings import Settings
 
