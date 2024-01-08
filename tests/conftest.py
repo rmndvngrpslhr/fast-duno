@@ -7,6 +7,19 @@ from sqlalchemy.pool import StaticPool
 from fast_duno.app import app
 from fast_duno.database import get_session
 from fast_duno.models import Base, User
+from fast_duno.security import get_password_hash
+
+
+@pytest.fixture
+def client(session):
+    def get_session_override():
+        return session
+
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = get_session_override
+        yield client
+
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture
@@ -23,22 +36,30 @@ def session():
 
 
 @pytest.fixture
-def client(session):
-    def get_session_override():
-        return session
+def token(client, user):
+    response = client.post(
+        '/token',
+        data={
+            'username': user.email,
+            'password': user.clean_password,
+        },
+    )
 
-    with TestClient(app) as client:
-        app.dependency_overrides[get_session] = get_session_override
-        yield client
-
-    app.dependency_overrides.clear()
+    return response.json()['access_token']
 
 
 @pytest.fixture
 def user(session):
-    user = User(username='Teste', email='teste@test.com', password='testtest')
+    password = 'testtest'
+    user = User(
+        username='Teste',
+        email='teste@test.com',
+        password=get_password_hash(password),
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
+
+    user.clean_password = 'testtest'
 
     return user

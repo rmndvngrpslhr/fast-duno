@@ -43,30 +43,23 @@ def test_create_user(client):
 
 
 def test_user_exists(client, user):
-    response = client.post(
-        '/users/',
-        json={
-            'username': 'alice',
-            'email': 'alice@example.com',
-            'password': 'secret',
-        },
-    )
+    endpoint = '/users/'
+    data = {
+        'username': 'alice',
+        'email': 'alice@example.com',
+        'password': 'secret',
+    }
+    response = client.post(endpoint, json=data)
+    response = client.post(endpoint, json=data)
 
-    response = client.post(
-        '/users/',
-        json={
-            'username': 'alice',
-            'email': 'alice@example.com',
-            'password': 'secret',
-        },
-    )
     assert response.status_code == 400
     assert response.json() == {'detail': 'Username already registered'}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'bob',
             'email': 'bob@example.com',
@@ -82,9 +75,10 @@ def test_update_user(client, user):
     }
 
 
-def test_update_user_not_found(client, user):
+def test_update_user_not_found(client, user, token):
     response = client.put(
-        '/users/10',
+        f'/users/{user.id + 1}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
             'username': 'bob',
             'email': 'bob@example.com',
@@ -92,19 +86,36 @@ def test_update_user_not_found(client, user):
         },
     )
 
-    assert response.status_code == 404
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Not enough permissions'}
 
 
-def test_delete_user(client, user):
-    response = client.delete('/users/1')
+def test_delete_user(client, user, token):
+    response = client.delete(
+        f'/users/{user.id}', headers={'Authorization': f'Bearer {token}'}
+    )
 
     assert response.status_code == 200
     assert response.json() == {'detail': 'User deleted'}
 
 
-def test_missing_user(client, user):
-    response = client.delete('/users/10')
+def test_missing_user(client, user, token):
+    response = client.delete(
+        f'/users/{user.id + 1}', headers={'Authorization': f'Bearer {token}'}
+    )
 
-    assert response.status_code == 404
-    assert response.json() == {'detail': 'User not found'}
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Not enough permissions'}
+
+
+def test_get_token(client, user):
+    response = client.post(
+        '/token',
+        data={'username': user.email, 'password': user.clean_password},
+    )
+
+    token = response.json()
+
+    assert response.status_code == 200
+    assert 'access_token' in token
+    assert 'token_type' in token
