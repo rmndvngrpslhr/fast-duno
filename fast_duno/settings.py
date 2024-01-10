@@ -7,3 +7,8 @@ class Settings(BaseSettings):
     )
 
     DATABASE_URL: str
+
+    DATABASE_URL: str
+    SECRET_KEY: str
+    ALGORITHM: str
+    create_access_token: int

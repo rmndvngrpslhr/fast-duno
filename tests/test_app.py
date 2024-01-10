@@ -9,7 +9,7 @@ client = TestClient(app)
 def test_root_deve_retornar_200_e_ola_mundo():
     response = client.get('/')
     assert response.status_code == 200
-    assert response.json() == {'message': 'Olá Mundo!'}
+    assert response.json() == {'message': 'Olá, Mundo!'}
 
 
 def test_read_users(client):
@@ -110,7 +110,7 @@ def test_missing_user(client, user, token):
 
 def test_get_token(client, user):
     response = client.post(
-        '/token',
+        'auth/token',
         data={'username': user.email, 'password': user.clean_password},
     )
 
