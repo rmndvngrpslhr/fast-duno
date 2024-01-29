@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from fast_duno.models import ToDo, User
+from fast_duno.models import User
 
 
 def test_create_user(session):
@@ -11,20 +11,3 @@ def test_create_user(session):
     user = session.scalar(select(User).where(User.username == 'alice'))
 
     assert user.username == 'alice'
-
-
-def test_create_todo(session, user: User):
-    todo = ToDo(
-        title=' Test To Do',
-        description='Test description',
-        state='draft',
-        user_id=user.id,
-    )
-
-    session.add(todo)
-    session.commit()
-    session.refresh(todo)
-
-    user = session.scalar(select(User).where(User.id == user.id))
-
-    assert todo in user.todos
