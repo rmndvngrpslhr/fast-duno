@@ -36,5 +36,8 @@ jobs:
       - name: Instalar dependências
         run: poetry install
 
+      - name: Teste
+        run: echo "This is the $DATABASE_URL environment variable"
+
       - name: Executar testes
         run: poetry run task test
