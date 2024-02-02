@@ -1,20 +1,5 @@
-import factory.fuzzy
-from fastapi.testclient import TestClient
-
-from fast_duno.app import app
-from fast_duno.models import ToDo, ToDoState
-
-client = TestClient(app)
-
-
-class ToDoFactory(factory.Factory):
-    class Meta:
-        model = ToDo
-
-    title = factory.Faker('text')
-    description = factory.Faker('text')
-    state = factory.fuzzy.FuzzyChoice(ToDoState)
-    user_id = 1
+from fast_duno.models import ToDoState
+from tests.factories import ToDoFactory
 
 
 def test_create_todo(client, token):
