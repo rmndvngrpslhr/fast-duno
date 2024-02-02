@@ -5,24 +5,23 @@ services:
     image: postgres
     volumes: 
       - pgdata:/var/lib/postgresql/data
-  environment:
-    POSTGRES_USER: app_user
-    POSTGRES_DB: app_db
-    POSTGRES_PASSWORD: app_password
-  ports:
-    - "5432:5432"
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
 
   fastduno_app:
     image: fastduno_app
+    entrypoint: ./entrypoint.sh
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     depends_on:
-      - fastduno_database:
-    environment:
-      DATABASE_URL: postgresql://app_user:app_password@fastduno_database:5432/app_db
-
+      - fastduno_database
+    
 volumes:
   pgdata:
