@@ -6,13 +6,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Copy repository archives 
+        uses: actions/checkout@v3
+
       - name: Install Python 3.12
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+
       - name: Install Poetry
         run: pipx install poetry
+
       - name: Install dependencies
         run: poetry install
+        
       - name: Run tests
         run: poetry run task test
