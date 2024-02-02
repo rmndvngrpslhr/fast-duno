@@ -39,7 +39,7 @@ jobs:
       - name: Teste
         run: echo "This is the ${{ secrets.DATABASE_URL  }} environment variable"
 
-      -name: Teste 2
+      - name: Teste 2
         run: echo "tHIS IS THE ${{  env.DATABASE_URL  }}"
 
       - name: Executar testes
