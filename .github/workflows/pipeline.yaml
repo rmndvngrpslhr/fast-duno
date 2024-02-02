@@ -37,7 +37,10 @@ jobs:
         run: poetry install
 
       - name: Teste
-        run: echo "This is the $DATABASE_URL environment variable"
+        run: echo "This is the ${{ secrets.DATABASE_URL  }} environment variable"
+
+      -name: Teste 2
+        run: echo "tHIS IS THE ${{  env.DATABASE_URL  }}"
 
       - name: Executar testes
         run: poetry run task test
