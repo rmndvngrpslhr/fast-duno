@@ -7,8 +7,8 @@ from sqlalchemy.orm import sessionmaker
 from fast_duno.app import app
 from fast_duno.database import get_session
 from fast_duno.models import Base, User
-from fast_duno.settings import Settings
 from fast_duno.security import get_password_hash
+from fast_duno.settings import Settings
 
 
 class UserFactory(factory.Factory):
@@ -41,7 +41,7 @@ def session():
     with Session() as session:
         yield session
         session.rollback()
-        
+
     Base.metadata.drop_all(engine)
 
 
