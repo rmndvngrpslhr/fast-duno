@@ -1,4 +1,3 @@
-import factory
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -6,9 +5,10 @@ from sqlalchemy.orm import sessionmaker
 
 from fast_duno.app import app
 from fast_duno.database import get_session
-from fast_duno.models import Base, User
+from fast_duno.models import Base
 from fast_duno.security import get_password_hash
 from fast_duno.settings import Settings
+<<<<<<< HEAD
 
 
 class UserFactory(factory.Factory):
@@ -19,6 +19,9 @@ class UserFactory(factory.Factory):
     username = factory.LazyAttribute(lambda obj: f'test{obj.id}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+=======
+from tests.factories import UserFactory
+>>>>>>> 4a92694ac858e9c86263e19d6cfdce9ea6b6d813
 
 
 @pytest.fixture
@@ -35,12 +38,19 @@ def client(session):
 
 @pytest.fixture
 def session():
+<<<<<<< HEAD
     engine = create_engine(
         Settings().DATABASE_URL,
     )
+=======
+    engine = create_engine(Settings().DATABASE_URL)
+>>>>>>> 4a92694ac858e9c86263e19d6cfdce9ea6b6d813
     Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(engine)
-    yield Session()
+    with Session() as session:
+        yield session
+        session.rollback()
+
     Base.metadata.drop_all(engine)
 
 
@@ -74,7 +84,7 @@ def user(session):
 @pytest.fixture
 def other_user(session):
     password = 'testtest'
-    user = UserFactory(password=get_password_hash(password))
+    user = UserFactory(id=2, password=get_password_hash(password))
 
     session.add(user)
     session.commit()

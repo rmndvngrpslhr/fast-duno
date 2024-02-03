@@ -4,8 +4,13 @@ services:
   fastduno_database:
     image: postgres
     env_file:
+<<<<<<< HEAD
       - .env
     volumes:
+=======
+      .env
+    volumes: 
+>>>>>>> 4a92694ac858e9c86263e19d6cfdce9ea6b6d813
       - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: app_user
@@ -21,13 +26,17 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file:
+<<<<<<< HEAD
       - .env
+=======
+      .env
+>>>>>>> 4a92694ac858e9c86263e19d6cfdce9ea6b6d813
     ports:
       - "8000:8000"
     depends_on:
       - fastduno_database
     environment:
       DATABASE_URL: postgresql://app_user:app_password@fastduno_database:5432/app_db
-
+    
 volumes:
   pgdata:
