@@ -8,4 +8,5 @@ jobs:
     steps:
       - name: Insstall Python
         uses: actions/setup-python@v4
-        with: python-version: '3.12'
+        with: 
+          python-version: '3.12'
