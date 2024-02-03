@@ -5,8 +5,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ALGORITHM: ${{ secrets.ALGORITHM }}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+
+    services:
+      postgres:
+        image: postgres
+    env:
+          POSTGRES_DB: app_db
+          POSTGRES_PASSWORD: app_password
+          POSTGRES_USER: app_user
+        ports:
+          - 5432:5432
     steps:
+      - name: Copy repo files
+        run: actions/checkout@v3
+
       - name: Insstall Python
         uses: actions/setup-python@v4
         with: 
           python-version: '3.12'
+        
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name : Run tests
+        run: poetry run task tests
