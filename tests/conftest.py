@@ -3,12 +3,12 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
 
 from fast_duno.app import app
 from fast_duno.database import get_session
 from fast_duno.models import Base, User
 from fast_duno.security import get_password_hash
+from fast_duno.settings import Settings
 
 
 class UserFactory(factory.Factory):
@@ -36,9 +36,7 @@ def client(session):
 @pytest.fixture
 def session():
     engine = create_engine(
-        'sqlite:///:memory:',
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool,
+        Settings().DATABASE_URL,
     )
     Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(engine)
