@@ -42,14 +42,14 @@ def test_create_user(client):
     }
 
 
-def test_user_exists(client, user):
+def test_user_exists(client):
     endpoint = '/users/'
     data = {
         'username': 'alice',
         'email': 'alice@example.com',
         'password': 'secret',
     }
-    response = client.post(endpoint, json=data)
+    client.post(endpoint, json=data)
     response = client.post(endpoint, json=data)
 
     assert response.status_code == 400
