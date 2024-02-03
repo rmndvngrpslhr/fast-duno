@@ -24,7 +24,7 @@ jobs:
       - name: Copy repo files
         uses: actions/checkout@v3
 
-      - name: Insstall Python
+      - name: Install Python
         uses: actions/setup-python@v4
         with: 
           python-version: '3.12'
