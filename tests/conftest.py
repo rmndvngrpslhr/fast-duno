@@ -1,4 +1,3 @@
-import factory
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -6,19 +5,10 @@ from sqlalchemy.orm import sessionmaker
 
 from fast_duno.app import app
 from fast_duno.database import get_session
-from fast_duno.models import Base, User
+from fast_duno.models import Base
 from fast_duno.security import get_password_hash
 from fast_duno.settings import Settings
-
-
-class UserFactory(factory.Factory):
-    class Meta:
-        model = User
-
-    id = factory.Sequence(lambda n: n)
-    username = factory.LazyAttribute(lambda obj: f'test{obj.id}')
-    email = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
-    password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+from tests.factories import UserFactory
 
 
 @pytest.fixture

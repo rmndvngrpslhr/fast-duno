@@ -4,8 +4,6 @@ services:
   fastduno_database:
     image: postgres
     env_file: .env
-    volumes:
-      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: app_user
       POSTGRES_DB: app_db
@@ -25,7 +23,5 @@ services:
     depends_on:
       - fastduno_database
     environment:
-      DATABASE_URL: postgresql://app_user:app_password@localhost:5432/app_db
+      DATABASE_URL: postgresql://app_user:app_password@fastduno_database:5432/app_db
     
-volumes:
-  pgdata:
